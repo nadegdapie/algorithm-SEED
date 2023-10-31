@@ -5,10 +5,10 @@
 
 struct Seed
 {
-    uint32_t K0, K1, K2, K3, R0, R1, R2, R3, R4, R5;
+    uint32_t K0, K1, K2, K3, R0, R1, R2, R3, R4, R5;//структура Seed, содержащую восемь 32-битных целых чисел и два 32-битных числа
 };
 
-Seed generateRandomSeed()
+Seed generateRandomSeed()//определяем функцию generateRandomSeed, которая генерирует случайное значение структуры Seed
 {
 
     std::random_device rd;
@@ -26,7 +26,7 @@ Seed generateRandomSeed()
     return seed;
 }
 
-void seedEncipher(uint32_t* plaintext, uint32_t* ciphertext, Seed* seed)
+void seedEncipher(uint32_t* plaintext, uint32_t* ciphertext, Seed* seed)//определяем функцию seedEncipher, которая выполняет шифрование заданного блока текста с использованием заданного сида
 {
     uint32_t L0, L1, R0, R1, T0, T1;
 
@@ -92,7 +92,7 @@ void seedEncipher(uint32_t* plaintext, uint32_t* ciphertext, Seed* seed)
     ciphertext[3] = R1;
 }
 
-std::string stringToHex(const std::string& str)
+std::string stringToHex(const std::string& str)//определяем функцию stringToHex, которая конвертирует строку в шестнадцатеричное представление
 {
     std::string result;
     for (char c : str)
@@ -103,7 +103,7 @@ std::string stringToHex(const std::string& str)
     return result;
 }
 
-std::string hexToString(const std::string& hexStr)
+std::string hexToString(const std::string& hexStr)//определяем функцию hexToString, которая конвертирует шестнадцатеричную строку в обычное представление
 {
     std::string result;
     for (size_t i = 0; i < hexStr.length(); i += 2)
@@ -158,16 +158,6 @@ int main()
 
     // Вывод зашифрованного текста в шестнадцатеричном формате
     std::cout << "Зашифрованный текст: " << stringToHex(std::string(reinterpret_cast<char*>(ciphertextArray), plaintextLength)) << std::endl;
-
-    // Дешифрование каждого блока текста
-    for (int i = 0; i < plaintextLength / 16; i++)
-    {
-        seedEncipher(ciphertextArray + i * 4, plaintextArray + i * 4, &seed);
-    }
-
-    // Преобразование массива int32_t в исходную строку
-    std::string decryptedText(reinterpret_cast<char*>(plaintextArray), plaintextLength);
-    std::cout << "Расшифрованный текст: " << decryptedText << std::endl;
 
     delete[] plaintextArray;
     delete[] ciphertextArray;
